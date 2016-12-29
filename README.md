@@ -1,0 +1,1 @@
+# LOL_simple_text_version
