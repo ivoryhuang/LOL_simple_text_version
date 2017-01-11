@@ -1,9 +1,14 @@
 #-*- coding: utf-8 -*-
 import sys
 sys.path.append("./champs")
+sys.path.append("./items")
 from brand import Brand
 from ziggs import Ziggs
 from aram import ARAM
+from Lost_Chapter import Lost_Chapter
+from Morellonomicon import Morellonomicon
+from Boots_Of_Speed import Boots_Of_Speed
+from Amplifying_Tome import Amplifying_Tome
 
 aram = ARAM()
 
@@ -24,6 +29,20 @@ Ziggs.learn_q()
 Ziggs.learn_w()
 Ziggs.learn_e()
 Ziggs.learn_r()
+
+Lost_Chapter = Lost_Chapter()
+Boots_Of_Speed = Boots_Of_Speed()
+Morellonomicon = Morellonomicon()
+Amplifying_Tome = Amplifying_Tome()
+Morellonomicon.get_data()
+
+Ziggs.buy_item(Lost_Chapter)
+Ziggs.buy_item(Boots_Of_Speed)
+Ziggs.sell_item(Boots_Of_Speed)
+#Ziggs.buy_item(Morellonomicon)
+#Ziggs.sell_item(Morellonomicon)
+
+
 
 Brand.trigger_q((0, 0))
 
