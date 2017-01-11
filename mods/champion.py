@@ -51,6 +51,12 @@ class Champ():
 			return False
 		return True
 
+	def buy_item(self, item):
+		item.bought(self)
+
+	def sell_item(self, item):
+		item.sold(self)
+
 
 
 class Champ_In_ARAM():
@@ -90,9 +96,6 @@ class Champ_In_ARAM():
 	@gold.setter
 	def gold(self, val):
 		if val < 0:
-			val = 0
-		if val - self._gold < 0:
-			print("not enough gold")
 			return
 		self._gold = val
 
@@ -105,6 +108,15 @@ class Champ_In_ARAM():
 		if val < 0:
 			val = 0
 		self._death_after_kill = val
+
+	@property
+	def health_regen(self):
+		return self._health_regen
+
+	@health_regen.setter
+	def health_regen(self, val):
+		# check range
+		self._health_regen = val
 
 	@property
 	def max_health(self):
@@ -192,13 +204,51 @@ class Champ_In_ARAM():
 	def magic_resist(self):
 		return self._magic_resist
 
+	@magic_resist.setter
+	def magic_resist(self, val):
+		if val < 0:
+			val = 0
+		self._magic_resist = val
+
 	@property
 	def armor(self):
 		return self._armor
 
+	@armor.setter
+	def armor(self, val):
+		if val < 0:
+			val = 0
+		self._armor = val
+
 	@property
 	def atk_speed(self):
 		return self._atk_speed
+
+	@atk_speed.setter
+	def atk_speed(self, val):
+		if val < 0:
+			val = 0
+		self._atk_speed = val
+
+	@property
+	def ad_dmg(self):
+		return self._ad_dmg
+
+	@ad_dmg.setter
+	def ad_dmg(self, val):
+		if val < 0:
+			return
+		self._ad_dmg = val
+
+	@property
+	def ap_dmg(self):
+		return self._ap_dmg
+
+	@ap_dmg.setter
+	def ap_dmg(self, val):
+		if val < 0:
+			return
+		self._ap_dmg = val
 
 	def lvup(self):
 		self.lv += 1
