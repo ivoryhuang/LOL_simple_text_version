@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 import sys
 sys.path.append("./mods")
-from ability import Ability, AP_Damage_Effect, Stun_Effect, Slow_Effect, \
+from ability import Ability, AP_Dmg_Effect, Stun_Effect, Slow_Effect, \
 Direct_Targeted_Ability, Ground_Targeted_Ability, Unit_Targeted_Ability
 from champion import Champ, Champ_In_ARAM
 import time
@@ -9,9 +9,9 @@ import time
 class Brand(Champ, Champ_In_ARAM):
 	def __init__(self, aram_center=None, team_idx=None, member_idx=None):
 		Champ.__init__(self, name='Brand', nickname='the Burning Vengeance',
-		attrs=['mage'], _max_health=507.68, _max_mana=375.6, _damage=57.04, _atk_speed=0.625,
+		attrs=['mage'], _max_health=507.68, _max_mana=375.6, _ap_dmg=57.04, _atk_speed=0.625,
 		_move_speed=340, _health_regen=5.42, _mana_regen=8.005, _magic_resist=30, _armor=21.88,
-		_health_incr_per_lv=76, _mana_incr_per_lv=42, _atk_speed_incr_per_lv=3, _damage_incr_per_lv=1.36,
+		_health_incr_per_lv=76, _mana_incr_per_lv=42, _atk_speed_incr_per_lv=3, _dmg_incr_per_lv=1.36,
 		_move_speed_incr_per_lv=0, _health_regen_incr_per_lv=0.55,
 		_mana_regen_incr_per_lv=0.6, _armor_incr_per_lv=3.5,
 		_magic_resist_incr_per_lv=0, innate=Blaze(), basic=Basic(), e=Conflagration(), r=Pyroclasm())
@@ -64,7 +64,7 @@ class Blaze():
 		if target.Blaze == 3:
 			self.explode(attacker, target)
 
-class Basic(AP_Damage_Effect, Unit_Targeted_Ability):
+class Basic(AP_Dmg_Effect, Unit_Targeted_Ability):
 	def __init__(self):
 		pass
 
@@ -74,13 +74,12 @@ class Basic(AP_Damage_Effect, Unit_Targeted_Ability):
 		self.start_attack(attacker, target)
 
 
-class Sear(Direct_Targeted_Ability, Ability, AP_Damage_Effect, Stun_Effect, Blaze):
+class Sear(Direct_Targeted_Ability, Ability, AP_Dmg_Effect, Stun_Effect, Blaze):
 	def __init__(self, aram_center=None):
-		Ability.__init__(self, name='Sear', _keypress='q', _cooldown_arr=[8, 7.5, 7, 6.5, 6],
-			_cost_arr=[50, 50, 50, 50, 50],
+		Ability.__init__(self, name='Sear', _keypress='q', _cooldown_arr=[8, 7.5, 7, 6.5, 6], _cost_arr=[50, 50, 50, 50, 50],
 			_cost_type='mana', max_lv=5)
 		Direct_Targeted_Ability.__init__(self, range=900)
-		AP_Damage_Effect.__init__(self, _damage_arr=[80, 110, 140, 170, 210])
+		AP_Dmg_Effect.__init__(self, _dmg_arr=[80, 110, 140, 170, 210])
 		Stun_Effect.__init__(self, _duration_arr=[1.5, 1.5, 1.5, 1.5, 1.5], delay=0)
 		Blaze.__init__(self)
 		self.aram_center=aram_center
@@ -100,17 +99,16 @@ class Sear(Direct_Targeted_Ability, Ability, AP_Damage_Effect, Stun_Effect, Blaz
 		self.finish_attack(attacker, target)
 		self.innate_effect(attacker, target)
 
-class Pillar_Of_Flame(Ground_Targeted_Ability, Ability, AP_Damage_Effect, Blaze):
+class Pillar_Of_Flame(Ground_Targeted_Ability, Ability, AP_Dmg_Effect, Blaze):
 	def __init__(self, aram_center=None):
-		Ability.__init__(self, name='Pillar of Flame', _keypress='w', _cooldown_arr=[10, 9.5, 9, 8.5, 8], 
-			_cost_arr=[60, 70, 80, 90, 100], _cost_type='mp', max_lv=5)
-		AP_Damage_Effect.__init__(self, _damage_arr=[75, 120, 165, 210, 255], delay=1)
+		Ability.__init__(self, name='Pillar of Flame', _keypress='w', _cooldown_arr=[10, 9.5, 9, 8.5, 8], _cost_arr=[60, 70, 80, 90, 100], _cost_type='mp', max_lv=5)
+		AP_Dmg_Effect.__init__(self, _dmg_arr=[75, 120, 165, 210, 255], delay=1)
 		Ground_Targeted_Ability.__init__(self, range=900, radius=125)
 		Blaze.__init__(self)
 		self.aram_center=aram_center
 
 	def start_attack_with_blaze(self, attacker, target):
-		dmg = (self._damage_arr[self.lv-1] - target.magic_resist) * 1.25
+		dmg = (self._dmg_arr[self.lv-1] - target.magic_resist) * 1.25
 		self.cal_real_dmg(attacker, target, dmg, self.name)
 
 	def trigger(self, attacker, coord):
@@ -131,11 +129,10 @@ class Pillar_Of_Flame(Ground_Targeted_Ability, Ability, AP_Damage_Effect, Blaze)
 
 
 
-class Conflagration(Unit_Targeted_Ability, Ability, AP_Damage_Effect, Blaze):
+class Conflagration(Unit_Targeted_Ability, Ability, AP_Dmg_Effect, Blaze):
 	def __init__(self):
-		Ability.__init__(self, name='Conflagration', _keypress='e', _cooldown_arr=[10, 9.5, 9, 8.5, 8],
-			_cost_arr=[60, 70, 80, 90, 100], _cost_type='mp', max_lv=5)
-		AP_Damage_Effect.__init__(self, _damage_arr=[75, 120, 165, 210, 255], delay=1)
+		Ability.__init__(self, name='Conflagration', _keypress='e', _cooldown_arr=[10, 9.5, 9, 8.5, 8], _cost_arr=[60, 70, 80, 90, 100], _cost_type='mp', max_lv=5)
+		AP_Dmg_Effect.__init__(self, _dmg_arr=[75, 120, 165, 210, 255], delay=1)
 		Unit_Targeted_Ability.__init__(self, range=625)
 		Blaze.__init__(self)
 
@@ -152,11 +149,10 @@ class Conflagration(Unit_Targeted_Ability, Ability, AP_Damage_Effect, Blaze):
 		self.innate_effect(attacker, target)
 		self.finish_attack(attacker, target)
 
-class Pyroclasm(Unit_Targeted_Ability, Ability, AP_Damage_Effect, Slow_Effect, Blaze):
+class Pyroclasm(Unit_Targeted_Ability, Ability, AP_Dmg_Effect, Slow_Effect, Blaze):
 	def __init__(self):
-		Ability.__init__(self, name='Pyroclasm', _keypress='r', _cooldown_arr=[105, 90, 75],
-		_cost_arr=[100, 100, 100], _cost_type='mp', max_lv=3)
-		AP_Damage_Effect.__init__(self, _damage_arr=[100, 200, 300], delay=1)
+		Ability.__init__(self, name='Pyroclasm', _keypress='r', _cooldown_arr=[105, 90, 75], _cost_arr=[100, 100, 100], _cost_type='mp', max_lv=3)
+		AP_Dmg_Effect.__init__(self, _dmg_arr=[100, 200, 300], delay=1)
 		Slow_Effect.__init__(self, _slow_percent_arr=[30, 45, 60])
 		Unit_Targeted_Ability.__init__(self, range=750)
 		Blaze.__init__(self)

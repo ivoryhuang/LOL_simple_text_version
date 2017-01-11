@@ -5,9 +5,10 @@ class Ability():
 	def __init__(self, **kwargs):
 		self.__dict__.update(kwargs)
 		self._lv = 0
+		self.cooldown_arr_backup = self._cooldown_arr
 
 	def intro(self):
-		print("This is lv %s %s \n %s attack" %(self.lv, self.name, self._damage))
+		print("This is lv %s %s \n %s attack" %(self.lv, self.name, self._dmg))
 
 	def ability_cost(self, champ):
 		if self._cost_type is None:
@@ -39,6 +40,14 @@ class Ability():
 		if val < 0 or val > self.max_lv:
 			return
 		self._lv = val
+
+	@property
+	def cooldown_arr(self):
+		return self._cooldown_arr
+
+	@cooldown_arr.setter
+	def cooldown_arr(self, val):
+		self._cooldown_arr = val
 
 	def lvup(self):
 		self.lv += 1
@@ -121,9 +130,9 @@ class Ground_Targeted_Ability(Range_Checker):
 		return target
 
 #===============================================#
-class Damage_Effect():
-	def __init__(self, _damage_arr=None, _duration_arr=None, delay=None):
-		self._damage_arr = _damage_arr
+class Dmg_Effect():
+	def __init__(self, _dmg_arr=None, _duration_arr=None, delay=None):
+		self._dmg_arr = _dmg_arr
 
 	def start_attack(self, attacker, target):
 		pass
@@ -131,26 +140,26 @@ class Damage_Effect():
 	def finish_attack(self, attacker, target):
 		pass
 
-	def set_damage_record(self, target, attacker, damage):
-		target.set_damage_record(self, attacker, damage)
+	def set_dmg_record(self, target, attacker, dmg):
+		target.set_dmg_record(self, attacker, dmg)
 
 
-class AD_Damage_Effect(Damage_Effect):
-	def __init__(self, _damage_arr=None, _duration_arr=None, delay=None):
-		Damage_Effect.__init__(self, _damage_arr=_damage_arr,
+class AD_Dmg_Effect(Dmg_Effect):
+	def __init__(self, _dmg_arr=None, _duration_arr=None, delay=None):
+		Dmg_Effect.__init__(self, _dmg_arr=_dmg_arr,
 			_duration_arr=_duration_arr, delay=delay)
 
 	def start_attack(self, attacker, target):
-		dmg = self._damage_arr[self.lv-1] - target.armor
+		dmg = self._dmg_arr[self.lv-1] + attacker.ad_dmg - target.armor
 		self.cal_real_dmg(attacker, target, dmg, self.name)
 
-class AP_Damage_Effect(Damage_Effect):
-	def __init__(self, _damage_arr=None, _duration_arr=None, delay=None):
-		Damage_Effect.__init__(self, _damage_arr=_damage_arr,
+class AP_Dmg_Effect(Dmg_Effect):
+	def __init__(self, _dmg_arr=None, _duration_arr=None, delay=None):
+		Dmg_Effect.__init__(self, _dmg_arr=_dmg_arr,
 			_duration_arr=_duration_arr, delay=delay)
 
 	def start_attack(self, attacker, target):
-		dmg = self._damage_arr[self.lv-1] - target.magic_resist
+		dmg = self._dmg_arr[self.lv-1] + attacker.ap_dmg - target.magic_resist
 		self.cal_real_dmg(attacker, target, dmg, self.name)
 
 #===============================================#
