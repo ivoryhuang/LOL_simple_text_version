@@ -19,6 +19,10 @@ class Item():
 	def stats(self, champ):
 		pass
 
+	@staticmethod
+	def passive_effect(champ):
+		pass
+		
 	def remove_stats(self, champ):
 		pass
 
