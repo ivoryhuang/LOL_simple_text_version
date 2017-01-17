@@ -8,14 +8,6 @@ class Item():
 		self.sell = sell
 		self.sub_items = [] #下層的item
 
-	@staticmethod
-	def decrease_cooldown(arr, arr_backup, percent):
-		return [arr[i] - x*percent for i, x in enumerate(arr_backup)]
-
-	@staticmethod
-	def increase_cooldown(arr, arr_backup, percent):
-		return [arr[i] + x*percent for i, x in enumerate(arr_backup)]
-
 	def stats(self, champ):
 		pass
 
@@ -66,4 +58,22 @@ class Item():
 		print(item_info)
 
 
+class Cool_Down_Item():
+	def __init__(self):
+		pass
+
+	@staticmethod
+	def decrease_cooldown(champ, percent):
+		champ.q.cooldown_arr = [champ.q.cooldown_arr[i] - x*percent for i, x in enumerate(champ.q.cooldown_arr_backup)]
+		champ.w.cooldown_arr = [champ.w.cooldown_arr[i] - x*percent for i, x in enumerate(champ.w.cooldown_arr_backup)]
+		champ.e.cooldown_arr = [champ.e.cooldown_arr[i] - x*percent for i, x in enumerate(champ.e.cooldown_arr_backup)]
+		champ.r.cooldown_arr = [champ.r.cooldown_arr[i] - x*percent for i, x in enumerate(champ.r.cooldown_arr_backup)]
+
+	@staticmethod
+	def increase_cooldown(champ, percent):
+		champ.q.cooldown_arr = [champ.q.cooldown_arr[i] + x*percent for i, x in enumerate(champ.q.cooldown_arr_backup)]
+		champ.w.cooldown_arr = [champ.w.cooldown_arr[i] + x*percent for i, x in enumerate(champ.w.cooldown_arr_backup)]
+		champ.e.cooldown_arr = [champ.e.cooldown_arr[i] + x*percent for i, x in enumerate(champ.e.cooldown_arr_backup)]
+		champ.r.cooldown_arr = [champ.r.cooldown_arr[i] + x*percent for i, x in enumerate(champ.r.cooldown_arr_backup)]
+		#return [arr[i] + x*percent for i, x in enumerate(arr_backup)]
 #http://leagueoflegends.wikia.com/wiki/Item
