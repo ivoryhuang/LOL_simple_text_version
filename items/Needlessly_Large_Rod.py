@@ -1,4 +1,4 @@
-from Item import Item
+from items.Item import Item
 
 class Needlessly_Large_Rod(Item):
 	def __init__(self):

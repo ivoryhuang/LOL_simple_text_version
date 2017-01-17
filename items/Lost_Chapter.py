@@ -1,6 +1,7 @@
-from Item import Item
-from Amplifying_Tome import Amplifying_Tome
-from Sapphire_Crystal import Sapphire_Crystal
+from items.Item import Item
+from items.Amplifying_Tome import Amplifying_Tome
+from items.Sapphire_Crystal import Sapphire_Crystal
+
 
 class Lost_Chapter(Item):
 	def __init__(self):

@@ -1,5 +1,5 @@
-from Item import Item
-from Amplifying_Tome import Amplifying_Tome
+from items.Item import Item
+from items.Amplifying_Tome import Amplifying_Tome
 
 class Fiendish_Codex(Item):
 	def __init__(self):

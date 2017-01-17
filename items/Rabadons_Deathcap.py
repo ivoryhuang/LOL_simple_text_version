@@ -1,7 +1,8 @@
-from Item import Item
-from Needlessly_Large_Rod import Needlessly_Large_Rod
-from Blasting_Wand import Blasting_Wand
-from Amplifying_Tome import Amplifying_Tome
+from items.Item import Item
+from items.Needlessly_Large_Rod import Needlessly_Large_Rod
+from items.Blasting_Wand import Blasting_Wand
+from items.Amplifying_Tome import Amplifying_Tome
+
 
 class Rabadons_Deathcap(Item):
 	def __init__(self):

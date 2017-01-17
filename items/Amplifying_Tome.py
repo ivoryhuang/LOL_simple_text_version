@@ -1,4 +1,4 @@
-from Item import Item
+from items.Item import Item
 
 class Amplifying_Tome(Item):
 	def __init__(self):

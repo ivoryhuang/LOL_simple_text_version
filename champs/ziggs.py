@@ -1,9 +1,7 @@
 #-*- coding: utf-8 -*-
-import sys
-sys.path.append("./mods")
-from ability import Ability, AP_Dmg_Effect, Slow_Effect, \
+from abilities import Ability, AP_Dmg_Effect, Slow_Effect, \
 Direct_Targeted_Ability, Ground_Targeted_Ability, Unit_Targeted_Ability
-from champion import Champ, Champ_In_ARAM
+from champs.champion import Champ, Champ_In_ARAM
 import time
 
 class Ziggs(Champ, Champ_In_ARAM):

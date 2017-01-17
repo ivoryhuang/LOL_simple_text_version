@@ -1,7 +1,7 @@
-from Item import Item
-from Fiendish_Codex import Fiendish_Codex
-from Lost_Chapter import Lost_Chapter
-from Amplifying_Tome import Amplifying_Tome
+from items.Item import Item
+from items.Fiendish_Codex import Fiendish_Codex
+from items.Lost_Chapter import Lost_Chapter
+from items.Amplifying_Tome import Amplifying_Tome
 
 class Morellonomicon(Item):
 	def __init__(self):

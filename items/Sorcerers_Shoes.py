@@ -1,5 +1,5 @@
-from Item import Item
-from Boots_Of_Speed import Boots_Of_Speed
+from items.Item import Item
+from items.Boots_Of_Speed import Boots_Of_Speed
 
 
 class Sorcerers_Shoes(Item):
