@@ -16,7 +16,8 @@ class ARAM(Gold_Center):
         'Godlike', 'Legendary']
 
     def compose_team(self, champs):
-        self.champs = champs
+        self.champs = {i: champs[i] for i in range(0, len(champs))}
+        print('self.champs', self.champs)
         self.assign_champ_record()
 
     def assign_champ_record(self):
@@ -112,7 +113,7 @@ class ARAM(Gold_Center):
         
     def aced(self, victim):
         victim_team_idx = victim.team_idx
-        for champ in self.champs:
+        for player_idx, champ in self.champs.items():
             if champ.team_idx == victim_team_idx and champ.alive:
                 return False
         return True

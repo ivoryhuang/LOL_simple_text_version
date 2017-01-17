@@ -84,7 +84,7 @@ class Direct_Targeted_Ability(Range_Checker):
 		attacker_coord_when_aimed = attacker.coord
 		vector = (coord[0] - attacker_coord_when_aimed[0], coord[1] - attacker_coord_when_aimed[1])
 
-		for champ in self.aram_center.champs:
+		for player_idx, champ in self.aram_center.champs.items():
 			if champ.member_idx == attacker.member_idx:
 				continue
 			if champ.coord == (-1, -1):
@@ -110,7 +110,7 @@ class Ground_Targeted_Ability(Range_Checker):
 
 	def aim_ground(self, attacker, coord):
 		target = []
-		for champ in self.aram_center.champs:
+		for player_idx, champ in self.aram_center.champs.items():
 			if champ.member_idx == attacker.member_idx:
 				continue
 			if champ.coord == (-1, -1):
