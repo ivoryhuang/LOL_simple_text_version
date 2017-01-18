@@ -8,9 +8,14 @@ class Champ():
 	def self_intro(self):
 		print('I am lv {} {} {}.'.format(self.lv, self.nickname, self.name))
 
-	def move(self, coord):
-		self.coord = coord
-		print("%s moves to %s" % (self.name, self.coord))
+	def move(self, val):
+		if val[0] < -1 or val[0] > 10000 or val[1] < -1 or val[1] > 10000:
+			return "超出可移動範圍了"
+		self.coord = val
+		return "%s moves to %s" % (self.name, self.coord)
+
+	def display_coord(self):
+		return "%s at %s" % (self.name, self.coord)
 
 	def learn_q(self):
 		self.q.lvup()
@@ -73,7 +78,7 @@ class Champ_In_ARAM():
 		self.cont_kill_count = 0
 		self._health = self._max_health
 		self._mana = self._max_mana
-		self._coord = (1, 1)
+		self.coord = (1, 1)
 		self.aram_center = aram_center
 		self.team_idx = team_idx
 		self.member_idx = member_idx
@@ -156,17 +161,6 @@ class Champ_In_ARAM():
 		elif val > self._max_health:
 			val = _max_health
 		self._health = val
-
-	@property
-	def coord(self):
-		return self._coord
-
-	@coord.setter
-	def coord(self, val):
-		if val[0] < -1 or val[0] > 10000 or val[1] < -1 or val[1] > 10000:
-			print("超出可移動範圍了")
-			return
-		self._coord = val
 
 	@property
 	def mana(self):
