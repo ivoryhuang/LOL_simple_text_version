@@ -150,6 +150,7 @@ class AD_Dmg_Effect(Dmg_Effect):
 			_duration_arr=_duration_arr, delay=delay)
 
 	def start_attack(self, attacker, target):
+		# ad_penetrat to be completed
 		dmg = self._dmg_arr[self.lv-1] + attacker.ad_dmg - target.armor
 		self.cal_real_dmg(attacker, target, dmg, self.name)
 
@@ -159,6 +160,7 @@ class AP_Dmg_Effect(Dmg_Effect):
 			_duration_arr=_duration_arr, delay=delay)
 
 	def start_attack(self, attacker, target):
+		# ap_penetrat to be completed
 		dmg = self._dmg_arr[self.lv-1] + attacker.ap_dmg - target.magic_resist
 		self.cal_real_dmg(attacker, target, dmg, self.name)
 
