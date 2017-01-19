@@ -23,6 +23,8 @@ print(s.recv(1024).decode())
 while True:
     msg = input()
     #msg = player_idx + '.' + msg
+    if not msg:
+        continue
     s.send(msg.encode())
     print(s.recv(1024).decode())
 

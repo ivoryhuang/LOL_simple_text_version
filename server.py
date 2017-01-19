@@ -2,13 +2,15 @@ import socket
 import _thread
 
 from champs import Brand, Ziggs
-from games import ARAM
+from games import ARAM, Item_Shop
 from items import *
 
 aram = ARAM()
-Brand = Brand(aram_center=aram, team_idx=0, member_idx=0)
-Ziggs = Ziggs(aram_center=aram, team_idx=1, member_idx=1)
+item_shop = Item_Shop()
+Brand = Brand(aram_center=aram, team_idx=0, member_idx=0, item_shop=item_shop)
+Ziggs = Ziggs(aram_center=aram, team_idx=1, member_idx=1, item_shop=item_shop)
 aram.compose_team([Brand, Ziggs])
+
 
 def send_msg(msg, c):
     c.send(msg.encode())
@@ -19,7 +21,7 @@ def handle_client(c, player_idx):
     champ = aram.champs[champ_idx]
 
     send_msg('You are %s' % (champ.name), c)
-    send_msg('\nYou want to: (1)Move (2)See the location of other champions (3)Buy items (4)Attack', c)
+    send_msg('\nYou want to: (1)Move (2)See the location of champions (3)Buy items (4)Sell items (5)See own items and gold (6)Attack', c)
     
     while True:
         choice = c.recv(1024).decode()
@@ -31,8 +33,7 @@ def handle_client(c, player_idx):
             coord = c.recv(1024).decode().split(',')
             x = int(coord[0])
             y = int(coord[1])
-            print('player_idx', player_idx)
-            result = aram.champs[player_idx].move((x, y))
+            result = champ.move((x, y))
             send_msg(result, c)
 
         #print everyone's location
@@ -42,12 +43,21 @@ def handle_client(c, player_idx):
 
         #buy itmes
         elif choice == '3':
-            pass
-        #choose attack
-        elif choice == '4':
-            msg = 'Attack '
+            send_msg(item_shop.display_items_to_sell(), c)
+            item_code = int(c.recv(1024).decode())
+            send_msg(champ.buy_item(item_code), c)
 
-        send_msg('\nYou want to: (1)Move (2)See the location of other champions (3)Buy items (4)Attack', c)
+        #sell items
+        elif choice == '4':
+            send_msg(item_shop.display_items_to_recycle(champ), c)
+            item_idx = int(c.recv(1024).decode())
+            send_msg(champ.sell_item(item_idx-1), c)
+
+        #see items and gold
+        elif choice == '5':
+            send_msg("$%d\n%s" % (champ.gold, str(champ.display_items())), c)
+
+        send_msg('\nYou want to: (1)Move (2)See the location of champions (3)Buy items (4)Sell items (5)See own items and gold (6)Attack', c)
 
     c.close()
 
