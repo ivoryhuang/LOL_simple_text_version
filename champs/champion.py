@@ -1,5 +1,7 @@
+#-*- coding: utf-8 -*-
 import math
 import time
+from games import Item_Shop
 
 class Champ():
 	def __init__(self, **kwargs):
@@ -56,16 +58,9 @@ class Champ():
 			return False
 		return True
 
-	def buy_item(self, item):
-		item.bought(self)
-
-	def sell_item(self, item):
-		item.sold(self)
-
-
 
 class Champ_In_ARAM():
-	def __init__(self, aram_center=None, team_idx=None, member_idx=None):
+	def __init__(self, aram_center=None, team_idx=None, member_idx=None, item_shop=None):
 		self.alive = True
 		self._lv = 3
 		self.exp = 0
@@ -79,9 +74,26 @@ class Champ_In_ARAM():
 		self._health = self._max_health
 		self._mana = self._max_mana
 		self.coord = (1, 1)
+		self.items = []
 		self.aram_center = aram_center
+		self.item_shop = item_shop
 		self.team_idx = team_idx
 		self.member_idx = member_idx
+
+	def buy_item(self, item_code):
+		return self.item_shop.order(self, item_code)
+
+	def sell_item(self, item_idx):
+		return self.item_shop.recycle(self, item_idx)
+
+	def display_items(self):
+		msg = ''
+		for idx, item in enumerate(self.items):
+			item_msg = "(%d) %s\n" % (idx+1, item.name)
+			msg += item_msg
+		if not msg:
+			msg = 'You have nothing'
+		return msg
 
 	def distance(self, target):
 		return sqrt(math.pow(self.x - target.x, 2) + math.pow(self.y - target.y, 2))
@@ -92,7 +104,6 @@ class Champ_In_ARAM():
 
 	def inform_death(self):
 		self.aram_center.update_death(self.member_idx)
-
 
 	@property
 	def gold(self):
