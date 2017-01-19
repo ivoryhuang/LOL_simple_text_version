@@ -11,7 +11,7 @@ class Lost_Chapter(Item):
 	def stats(self, champ):
 		champ.ap_dmg += 25
 		champ.max_mana += 300
-		print("%s ap damage increase %d, mana increase %d" % (champ.name, 25, 300))
+		return "%s ap damage increase %d, mana increase %d" % (champ.name, 25, 300)
 
 	@staticmethod
 	def passive_effect(champ):
@@ -20,5 +20,5 @@ class Lost_Chapter(Item):
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 25
 		champ.max_mana -= 300
-		print("%s ap damage decrease %d, mana decrease %d" % (champ.name, 25, 300))
+		return "%s ap damage decrease %d, mana decrease %d" % (champ.name, 25, 300)
 

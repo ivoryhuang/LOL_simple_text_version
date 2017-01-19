@@ -7,8 +7,8 @@ class Amplifying_Tome(Item):
 
 	def stats(self, champ):
 		champ.ap_dmg += 20
-		print("%s ap damage increase %d" % (champ.name, 20))
+		return "%s ap damage increase %d" % (champ.name, 20)
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 20
-		print("%s ap damage decrease %d" % (champ.name, 20))
+		return "%s ap damage decrease %d" % (champ.name, 20)

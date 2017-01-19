@@ -20,15 +20,34 @@ class Item():
 
 	def bought(self, champ):
 		if self.cost > champ.gold:
-			return
+			return "not enough gold"
 		champ.gold -= self.cost
-		print("%s bought %s, costs %d" % (champ.name, self.name, self.cost))
-		self.stats(champ)
+		msg = self.stats(champ)
+		return "%s bought %s, costs $%d -> %s\n" % (champ.name, self.name, self.cost, msg)
 
 	def sold(self, champ):
 		champ.gold += self.sell
-		print("%s sold %s, get %d" % (champ.name, self.name, self.sell))
-		self.remove_stats(champ)
+		msg = self.remove_stats(champ)
+		return "%s sold %s, get $%d -> %s\n" % (champ.name, self.name, self.sell, msg)
+
+	def upgrade(self, champ):
+		msg = self.remove_stats(champ)
+		return "%s upgrades -> %s\n" % (self.name, msg)
+
+	@staticmethod
+	def find_sub_item(item, result):
+		if item.sub_items is None:
+			return
+		for sub_item in item.sub_items:
+			result.append(sub_item)
+			Item.find_sub_item(sub_item, result)
+
+	def sub_item(self):
+		if self.sub_items is None:
+			return []
+		sub_items = []
+		self.find_sub_item(self, sub_items)
+		return sub_items
 
 	@staticmethod
 	def gen_item_info(item):
@@ -75,5 +94,5 @@ class Cool_Down_Item():
 		champ.w.cooldown_arr = [champ.w.cooldown_arr[i] + x*percent for i, x in enumerate(champ.w.cooldown_arr_backup)]
 		champ.e.cooldown_arr = [champ.e.cooldown_arr[i] + x*percent for i, x in enumerate(champ.e.cooldown_arr_backup)]
 		champ.r.cooldown_arr = [champ.r.cooldown_arr[i] + x*percent for i, x in enumerate(champ.r.cooldown_arr_backup)]
-		#return [arr[i] + x*percent for i, x in enumerate(arr_backup)]
+
 #http://leagueoflegends.wikia.com/wiki/Item

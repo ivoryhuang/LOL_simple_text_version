@@ -7,8 +7,8 @@ class Needlessly_Large_Rod(Item):
 
 	def stats(self, champ):
 		champ.ap_dmg += 60
-		print("%s ap damage increase %d" % (champ.name, 60))
+		return "%s ap damage increase %d" % (champ.name, 60)
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 60
-		print("%s ap damage decrease %d" % (champ.name, 60))
+		return "%s ap damage decrease %d" % (champ.name, 60)

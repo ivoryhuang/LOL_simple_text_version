@@ -10,9 +10,9 @@ class Sorcerers_Shoes(Item):
 	def stats(self, champ):
 		champ.move_speed += 45
 		champ.ap_penetrat += 15
-		print("%s move_speed increase %d, ap penetration increase %d" % (champ.name, 45, 15) +'%')
+		return "%s move_speed increase %d, ap penetration increase %d" % (champ.name, 45, 15) +'%'
 
 	def remove_stats(self, champ):
 		champ.move_speed -= 45
 		champ.ap_penetrat -= 15
-		print("%s move_speed decrease %d, ap penetration decrease %d" % (champ.name, 45, 15) +'%')
+		return "%s move_speed decrease %d, ap penetration decrease %d" % (champ.name, 45, 15) +'%'

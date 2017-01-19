@@ -7,8 +7,8 @@ class Blasting_Wand(Item):
 
 	def stats(self, champ):
 		champ.ap_dmg += 40
-		print("%s ap damage increase %d" % (champ.name, 40))
+		return "%s ap damage increase %d" % (champ.name, 40)
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 40
-		print("%s ap damage decrease %d" % (champ.name, 40))
+		return "%s ap damage decrease %d" % (champ.name, 40)

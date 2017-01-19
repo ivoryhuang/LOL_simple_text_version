@@ -11,14 +11,14 @@ class Rabadons_Deathcap(Item):
 
 	def stats(self, champ):
 		champ.ap_dmg += 120
-		print("%s ap damage increase %d" % (champ.name, 120))
+		return "%s ap damage increase %d" % (champ.name, 120)
 
 	@staticmethod
 	def passive_effect(champ):
 		champ.ap_dmg *= 1.35
-		print("%s ap damage increase %d" % (champ.name, 35) + '%')
+		return "%s ap damage increase %d" % (champ.name, 35) + '%'
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 120
 		champ.ap_dmg /= 1.35
-		print("%s ap damage decrease %d, damage decrease %d" % (champ.name, 120, 35) +'%')
+		return "%s ap damage decrease %d, damage decrease %d" % (champ.name, 120, 35) +'%'

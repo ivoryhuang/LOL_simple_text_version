@@ -9,9 +9,9 @@ class Fiendish_Codex(Item, Cool_Down_Item):
 	def stats(self, champ):
 		champ.ap_dmg += 30
 		self.decrease_cooldown(champ, 0.1)
-		print("%s ap damge increase %d, cooldown decrease %d" % (champ.name, 30, 10) + '%')
+		return "%s ap damge increase %d, cooldown decrease %d" % (champ.name, 30, 10) + '%'
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 30
 		self.increase_cooldown(champ, 0.1)
-		print("%s ap damge decrease %d, cooldown increase %d" % (champ.name, 30, 10) + '%')
+		return "%s ap damge decrease %d, cooldown increase %d" % (champ.name, 30, 10) + '%'

@@ -7,8 +7,8 @@ class Sapphire_Crystal(Item):
 
 	def stats(self, champ):
 		champ.max_mana += 250
-		print("%s mana increase %d" % (champ.name, 250))
+		return "%s mana increase %d" % (champ.name, 250)
 
 	def remove_stats(self, champ):
 		champ.max_mana -= 250
-		print("%s mana decrease %d" % (champ.name, 250))
+		return "%s mana decrease %d" % (champ.name, 250)

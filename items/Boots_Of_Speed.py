@@ -7,8 +7,8 @@ class Boots_Of_Speed(Item):
 
 	def stats(self, champ):
 		champ.move_speed += 25
-		print("%s move speed increase %d" % (champ.name, 25))
+		return "%s move speed increase %d" % (champ.name, 25)
 
 	def remove_stats(self, champ):
 		champ.move_speed -= 25
-		print("%s move speed decrease %d" % (champ.name, 25))
+		return "%s move speed decrease %d" % (champ.name, 25)
