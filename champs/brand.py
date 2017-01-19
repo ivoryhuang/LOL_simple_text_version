@@ -5,15 +5,15 @@ from champs.champion import Champ, Champ_In_ARAM
 import time
 
 class Brand(Champ, Champ_In_ARAM):
-	def __init__(self, aram_center=None, team_idx=None, member_idx=None):
+	def __init__(self, aram_center=None, team_idx=None, member_idx=None, item_shop=None):
 		Champ.__init__(self, name='Brand', nickname='the Burning Vengeance',
 		attrs=['mage'], _max_health=507.68, _max_mana=375.6, _ap_dmg=57.04, _atk_speed=0.625,
 		_move_speed=340, _health_regen=5.42, _mana_regen=8.005, _magic_resist=30, _armor=21.88,
 		_health_incr_per_lv=76, _mana_incr_per_lv=42, _atk_speed_incr_per_lv=3, _dmg_incr_per_lv=1.36,
 		_move_speed_incr_per_lv=0, _health_regen_incr_per_lv=0.55,
-		_mana_regen_incr_per_lv=0.6, _armor_incr_per_lv=3.5,
+		_mana_regen_incr_per_lv=0.6, _armor_incr_per_lv=3.5, ap_penetrat=0, ad_penetrat=0,
 		_magic_resist_incr_per_lv=0, innate=Blaze(), basic=Basic(), e=Conflagration(), r=Pyroclasm())
-		Champ_In_ARAM.__init__(self, aram_center=aram_center, team_idx=team_idx, member_idx=member_idx)
+		Champ_In_ARAM.__init__(self, aram_center=aram_center, team_idx=team_idx, member_idx=member_idx, item_shop=item_shop)
 		self.q = Sear(aram_center=aram_center)
 		self.w = Pillar_Of_Flame(aram_center=aram_center)
 

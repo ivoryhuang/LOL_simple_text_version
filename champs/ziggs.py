@@ -5,15 +5,15 @@ from champs.champion import Champ, Champ_In_ARAM
 import time
 
 class Ziggs(Champ, Champ_In_ARAM):
-	def __init__(self, aram_center=None, team_idx=None, member_idx=None):
+	def __init__(self, aram_center=None, team_idx=None, member_idx=None, item_shop=None):
 		Champ.__init__(self, name='Ziggs', nickname='the Hexplosives Expert',
 		attrs=['mage'], _max_health=524.4, _max_mana=384, _ap_dmg=54.208, _atk_speed=0.656,
 		_move_speed=325, _health_regen=6.25, _mana_regen=6, _magic_resist=30, _armor=21.5,
 		_health_incr_per_lv=80, _mana_incr_per_lv=47, _atk_speed_incr_per_lv=2, _dmg_incr_per_lv=3.1,
 		_move_speed_incr_per_lv=0, _health_regen_incr_per_lv=0.6,
-		_mana_regen_incr_per_lv=0.8, _armor_incr_per_lv=3.3,
+		_mana_regen_incr_per_lv=0.8, _armor_incr_per_lv=3.3, ap_penetrat=0, ad_penetrat=0,
 		_magic_resist_incr_per_lv=0, innate=Short_Fuse())
-		Champ_In_ARAM.__init__(self, aram_center=aram_center, team_idx=team_idx, member_idx=member_idx)
+		Champ_In_ARAM.__init__(self, aram_center=aram_center, team_idx=team_idx, member_idx=member_idx, item_shop=item_shop)
 		self.q = Bouncing_Bomb(aram_center=aram_center)
 		self.w = Satchel_Charge(aram_center=aram_center)
 		self.e = Hexplosive_Minefield(aram_center=aram_center)
