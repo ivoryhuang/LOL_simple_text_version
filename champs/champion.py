@@ -31,32 +31,28 @@ class Champ():
 	def learn_r(self):
 		self.r.lvup()
 
-	def trigger_basic(self, target):
-		self.basic.trigger(target, self)
+	def trigger_basic(self, coord):
+		self.basic.trigger(self, coord)
 
-	def learnt_q(self):
+	def trigger_q(self, coord):
 		if self.q.lv == 0:
-			print("You haven't leant Q")
-			return False
-		return True
+			return "You haven't leant Q"
+		return self.q.trigger(self, coord) #target is a champ object
 
-	def learnt_w(self):
+	def trigger_w(self, coord):
 		if self.w.lv == 0:
-			print("You haven't leant W")
-			return False
-		return True
+			return "You haven't leant W"
+		return self.w.trigger(self, coord)
 
-	def learnt_e(self):
+	def trigger_e(self, coord):
 		if self.e.lv == 0:
-			print("You haven't leant E")
-			return False
-		return True
+			return "You haven't leant E"
+		return self.e.trigger(self, coord)
 
-	def learnt_r(self):
+	def trigger_r(self, coord):
 		if self.r.lv == 0:
-			print("You haven't leant R")
-			return False
-		return True
+			return "You haven't leant R"
+		return self.r.trigger(self, coord)
 
 
 class Champ_In_ARAM():
@@ -100,10 +96,10 @@ class Champ_In_ARAM():
 
 	def inform_dmg(self, attacker_idx, dmg, ability_name):
 		time_stamp = time.time()
-		self.aram_center.update_dmg((attacker_idx, self.member_idx, dmg, ability_name, time_stamp))
+		return self.aram_center.update_dmg((attacker_idx, self.member_idx, dmg, ability_name, time_stamp))
 
 	def inform_death(self):
-		self.aram_center.update_death(self.member_idx)
+		return self.aram_center.update_death(self.member_idx)
 
 	@property
 	def gold(self):
