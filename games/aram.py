@@ -17,13 +17,11 @@ class ARAM(Gold_Center):
 
     def compose_team(self, champs):
         self.champs = {i: champs[i] for i in range(0, len(champs))}
-        print('self.champs', self.champs)
         self.assign_champ_record()
 
     def assign_champ_record(self):
         self.assigned_champs = list(range(len(self.champs)))
         random.shuffle(self.assigned_champs)
-        print(self.assigned_champs)
 
     def random_assign_champ(self):
         return self.assigned_champs.pop()
@@ -35,7 +33,7 @@ class ARAM(Gold_Center):
         target = self.champs[data[1]]
         dmg = data[2]
         ability_name = data[3]
-        print("%s %s attacks %s, causes %s damage, %s %s health left." % (attacker_name, ability_name, target.name, dmg, target.name, target.health))
+        return "%s %s attacks %s, causes %s damage, %s %s health left.\n" % (attacker_name, ability_name, target.name, dmg, target.name, target.health)
 
     def clean_tmp_dmg_rcrd(self, victim_idx):
         self.tmp_dmg_rcrd = list(filter(lambda x: x[1] != victim_idx, self.tmp_dmg_rcrd))
@@ -96,9 +94,12 @@ class ARAM(Gold_Center):
         self.set_champ_dead(victim)
         list(map(lambda x: self.set_champ_assist(x), assists))
 
-        self.death_announce(killer, victim)
+        msg = ''
+        msg += self.death_announce(killer, victim) +'\n'
 
-        self.give_gold(killer, victim)
+        msg += "%s is dead\n" % (victim.name)
+        msg += self.give_gold(killer, victim) +'\n'
+        return msg
 
     def intro(self):
         def member_intro(x):
@@ -107,9 +108,10 @@ class ARAM(Gold_Center):
         list(map(member_intro , self.champs))
 
     def death_announce(self, killer, victim):
-        print("%s %s %s" % (killer.name, self.cont_kill_descript[killer.cont_kill_count-1], victim.name))
+        victim.alive = False
+        return "%s %s %s\n" % (killer.name, self.cont_kill_descript[killer.cont_kill_count-1], victim.name)
         if self.aced(victim):
-            print("%s aced" % (killer.name))
+            return "%s aced\n" % (killer.name)
         
     def aced(self, victim):
         victim_team_idx = victim.team_idx
@@ -117,4 +119,6 @@ class ARAM(Gold_Center):
             if champ.team_idx == victim_team_idx and champ.alive:
                 return False
         return True
+
+    
         
