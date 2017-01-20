@@ -6,6 +6,7 @@ class Ability():
 		self.__dict__.update(kwargs)
 		self._lv = 0
 		self.cooldown_arr_backup = self._cooldown_arr
+		self.timestamp = 0
 
 	def intro(self):
 		print("This is lv %s %s \n %s attack" %(self.lv, self.name, self._dmg))
@@ -18,18 +19,20 @@ class Ability():
 			champ.mana -= cost
 		elif self._cost_type == 'health':
 			champ.health -= cost
-		print("%s cost %s %s" % (champ.name, cost, self._cost_type))
+		return "%s cost %s %s" % (champ.name, cost, self._cost_type)
 
 	def cal_real_dmg(self, attacker, target, dmg, ability_name):
 		origin_health = target.health
 		target.health -= dmg
+		msg = ''
 		if target.health > 0:
 			real_dmg = dmg
-			target.inform_dmg(attacker.member_idx, real_dmg, ability_name)
+			return target.inform_dmg(attacker.member_idx, real_dmg, ability_name)
 		else:
 			real_dmg = origin_health
-			target.inform_dmg(attacker.member_idx, real_dmg, ability_name)
-			target.inform_death()
+			msg += target.inform_dmg(attacker.member_idx, real_dmg, ability_name)
+			msg += target.inform_death()
+			return msg
 
 	@property
 	def lv(self):
@@ -55,7 +58,9 @@ class Ability():
 	def finish_ability(self):
 		pass
 
-class Range_Checker():
+
+
+class Target_Finder():
 	def __init__(self, range=None, radius=None):
 		self.range = range
 		self.radius = radius
@@ -66,68 +71,115 @@ class Range_Checker():
 
 	def valid_range(self, attacker_coord, target_coord):
 		if self.distance(attacker_coord, target_coord) > self.range:
-			print("超過施放範圍了")
 			return False
 		return True
 
 
-class Unit_Targeted_Ability(Range_Checker):
+class Unit_Targeted_Ability(Target_Finder):
 	def __init__(self, range=None):
-		Range_Checker.__init__(self, range=range)
+		Target_Finder.__init__(self, range=range)
+		self.radius = 2
 
-class Direct_Targeted_Ability(Range_Checker):
+	def find_single_target_by_point(self, attacker, target_coord):
+		target = ''
+		for player_idx, champ in attacker.aram_center.champs.items():
+			if champ.member_idx == attacker.member_idx:
+				continue
+			if not champ.alive:
+				continue
+
+			champ_distance_from_targeted_center = self.distance(target_coord, champ.coord)
+			#if target在技能範圍內
+			if champ_distance_from_targeted_center > self.radius:
+				continue
+			target = champ
+		return target
+
+	def find_target(self, attacker, coord):
+		return self.find_single_target_by_point(attacker, coord)
+
+	def trigger(self, attacker, coord):
+		if not self.valid_range(attacker.coord, coord):
+			return "超過施放範圍"
+		target = self.find_target(attacker, coord)
+		if not target:
+			return "沒打到人"
+
+		msg = self.start_attack(attacker, target)
+		self.finish_attack(attacker, target)
+		return msg
+
+
+class Direct_Targeted_Ability(Target_Finder):
 	def __init__(self, range=None, radius=None):
-		Range_Checker.__init__(self, range=range, radius=radius)
+		Target_Finder.__init__(self, range=range, radius=radius)
 
-	def aim_direct(self, attacker, coord, multi):
+	def find_target(self, attacker, coord, multi):
 		target = []
 		attacker_coord_when_aimed = attacker.coord
 		vector = (coord[0] - attacker_coord_when_aimed[0], coord[1] - attacker_coord_when_aimed[1])
-
-		for player_idx, champ in self.aram_center.champs.items():
+		'''
+		if vector[0] == 0:
+			vector = (0.1, vector[1])
+		if vector[1] == 0:
+			vector = (vector[0], 0.1)
+		'''
+		for player_idx, champ in attacker.aram_center.champs.items():
 			if champ.member_idx == attacker.member_idx:
 				continue
-			if champ.coord == (-1, -1):
-				#死了
-				return
-			champ_vector = (champ.coord[0] - attacker_coord_when_aimed[0], champ.coord[1] - attacker_coord_when_aimed[1])
+			if not champ.alive:
+				continue
+			ability_vector = (champ.coord[0] - attacker_coord_when_aimed[0], champ.coord[1] - attacker_coord_when_aimed[1])
 			#if target和attacker指向的方向在同一直線上, 且在range內
-			if champ_vector[0]/vector[0] == champ_vector[1]/vector[1] and self.distance(attacker_coord_when_aimed, champ.coord) <= self.range:
+
+			if ability_vector[0]/vector[0] == ability_vector[1]/vector[1] and self.distance(attacker_coord_when_aimed, champ.coord) <= self.range:
 				target.append(champ)
 				#if 指向技有多個目標(可穿透)
 				if not multi:
 					break
-		if not target:
-			print("沒打到人")
-		else:
-			print("打到了")
-			list(map(lambda x: print("%s " % (x.name)) ,target))
+
 		return target
 
-class Ground_Targeted_Ability(Range_Checker):
+class Ground_Targeted_Ability(Target_Finder):
 	def __init__(self, range=None, radius=None):
-		Range_Checker.__init__(self, range=range, radius=radius)
+		Target_Finder.__init__(self, range=range, radius=radius)
 
-	def aim_ground(self, attacker, coord):
+	def find_multi_target_by_point(self, attacker, target_coord):
 		target = []
-		for player_idx, champ in self.aram_center.champs.items():
+		for player_idx, champ in attacker.aram_center.champs.items():
 			if champ.member_idx == attacker.member_idx:
 				continue
-			if champ.coord == (-1, -1):
-				#死了不能瞄準, 因為沒有UI, 只能先這樣判斷
-				return
-			champ_distance_from_targeted_center = self.distance(coord, champ.coord)
+			if not champ.alive:
+				continue
+
+			champ_distance_from_targeted_center = self.distance(attacker.coord, champ.coord)
+
 			if champ_distance_from_targeted_center > self.radius:
 				continue
-			#if target在技能範圍內
 			target.append(champ)
-
-		if not target:
-			print("沒打到人")
-		else:
-			print("打到了")
-			list(map(lambda x: print("%s " % (x.name)) ,target))
 		return target
+
+	def find_target(self, attacker, coord):
+		return self.find_multi_target_by_point(attacker, coord)
+
+	#標準流程
+	def trigger(self, attacker, coord):
+		if not self.valid_range(attacker.coord, coord):
+			return "超過施放範圍"
+		
+		msg = ''
+		msg += self.ability_cost(attacker)
+		
+		targets = self.find_target(attacker, coord)
+
+		if not targets:
+			msg += "沒打到人"
+			return msg
+
+		for target in targets:
+			msg += self.start_attack(attacker, target)
+			self.finish_attack(attacker, target)
+		return msg
 
 #===============================================#
 class Dmg_Effect():
@@ -152,7 +204,7 @@ class AD_Dmg_Effect(Dmg_Effect):
 	def start_attack(self, attacker, target):
 		# ad_penetrat to be completed
 		dmg = self._dmg_arr[self.lv-1] + attacker.ad_dmg - target.armor
-		self.cal_real_dmg(attacker, target, dmg, self.name)
+		return self.cal_real_dmg(attacker, target, dmg, self.name)
 
 class AP_Dmg_Effect(Dmg_Effect):
 	def __init__(self, _dmg_arr=None, _duration_arr=None, delay=None):
@@ -162,8 +214,7 @@ class AP_Dmg_Effect(Dmg_Effect):
 	def start_attack(self, attacker, target):
 		# ap_penetrat to be completed
 		dmg = self._dmg_arr[self.lv-1] + attacker.ap_dmg - target.magic_resist
-		self.cal_real_dmg(attacker, target, dmg, self.name)
-
+		return self.cal_real_dmg(attacker, target, dmg, self.name)
 #===============================================#
 
 class Sup_Effect():
@@ -196,9 +247,11 @@ class CC_Effect():
 		self._duration_arr = _duration_arr
 
 	def do_cc(self, target):
-		self.start_cc(target)
+		msg = ''
+		msg += self.start_cc(target)
 		#time.sleep(self._duration_arr[self.lv-1])
 		self.finish_cc(target)
+		return msg
 
 	def start_cc(self, target):
 		pass
@@ -224,7 +277,7 @@ class Stun_Effect(CC_Effect):
 	def start_cc(self, target):
 		self.origin_speed = target.move_speed
 		target.move_speed = 0
-		print("%s stunned" % (target.name))
+		return "%s stunned" % (target.name)
 
 	def finish_cc(self, target):
 		target.move_speed = self.origin_speed
@@ -237,6 +290,7 @@ class Blind_Effect(CC_Effect):
 	def start_cc(self, target):
 		self.origin_speed = target.move_speed
 		target.move_speed = 0
+		return "%s is blind" % (target.name)
 
 	def finish_cc(self, target):
 		target.move_speed = self.origin_speed
@@ -252,7 +306,7 @@ class Slow_Effect(CC_Effect):
 		slow_percent = self._slow_percent_arr[self.lv-1]
 		new_speed = self.origin_speed*(100 - slow_percent) /100
 		target.move_speed = new_speed
-		print("%s slows %s" %(target.name, slow_percent)+'%')
+		return "%s slows %s" %(target.name, slow_percent)+'%'
 
 	def finish_cc(self, target):
 		target.move_speed = self.origin_speed
