@@ -28,4 +28,4 @@ class Gold_Center():
             gold = self.self_value[victim.self_value_idx[0]][victim.self_value_idx[1]]
 
         killer.gold += gold
-        print("%s got %s gold, total %s gold" % (killer.name, gold, killer.gold))
+        return "%s got %s gold, total %s gold\n" % (killer.name, gold, killer.gold)
