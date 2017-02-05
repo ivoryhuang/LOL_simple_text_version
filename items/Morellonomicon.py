@@ -12,10 +12,10 @@ class Morellonomicon(Item, Cool_Down_Item):
 		champ.ap_dmg += 100
 		champ.max_mana += 400
 		self.decrease_cooldown(champ, 0.2)
-		print("%s ap damage increase %d, mana increase %d, cooldown decrease %d" % (champ.name, 100, 400, 20) +'%')
+		return "%s ap damage increase %d, mana increase %d, cooldown decrease %d" % (champ.name, 100, 400, 20) +'%'
 
 	def remove_stats(self, champ):
 		champ.ap_dmg -= 100
 		champ.max_mana -= 400
 		self.increase_cooldown(champ, 0.2)
-		print("%s ap damage decrease %d, mana decrease %d, cooldown increase %d" % (champ.name, 100, 400, 20) +'%')
+		return "%s ap damage decrease %d, mana decrease %d, cooldown increase %d" % (champ.name, 100, 400, 20) +'%'
