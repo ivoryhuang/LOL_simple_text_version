@@ -16,13 +16,11 @@ except(socket.error, msg):
     exit(1)
 
 print('---------ARAM starts---------')
-player_idx = s.recv(1024).decode()
-print('player_idx', player_idx, '\n')
+print(s.recv(1024).decode())
 print(s.recv(1024).decode())
 
 while True:
     msg = input()
-    #msg = player_idx + '.' + msg
     if not msg:
         continue
     s.send(msg.encode())
